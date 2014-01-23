@@ -29,7 +29,7 @@
 #include "Arduino.h"
 #include <SensorsStatus.h>
 
-//#define MPU6000_I2C	// insert this define before #include <Platform_MPU6000.h> when you use a I2C based MPU6050
+#define MPU6000_I2C	// insert this define before #include <Platform_MPU6000.h> when you use a I2C based MPU6050
 
 // MPU 6000 registers
 #define MPUREG_WHOAMI			0x75

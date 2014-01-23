@@ -86,8 +86,6 @@ void inititalizeRangeFinders() {
   rangerWaitCycles = 10; // allow to initialize
 }
 
-int a = 100;
-short range =0;
 void updateRangeFinders() {
 
   byte rangerToRead = 0;
@@ -116,12 +114,8 @@ void updateRangeFinders() {
   if (rangeFinders[rangerToTrigger].triggerpin) {
     digitalWrite(rangeFinders[rangerToTrigger].triggerpin, HIGH);
   }
-	
-	range += a;
-	if (range > 3500){
-		range =0;
-		}
 
+  short range = (short)((long)analogRead(rangeFinders[rangerToRead].pin) * (long)(rangerScale[rangeFinders[rangerToRead].type]) / (1L<<ADC_NUMBER_OF_BITS));
 
   // Following will accept the sample if it's either withing "spike margin" of last raw reading or previous accepted reading
   // otherwise it's ignored as noise

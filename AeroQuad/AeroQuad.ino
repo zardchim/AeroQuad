@@ -28,7 +28,6 @@
 
 #include "UserConfiguration.h" // Edit this file first before uploading to the AeroQuad
 
-//
 // Define Security Checks
 //
 

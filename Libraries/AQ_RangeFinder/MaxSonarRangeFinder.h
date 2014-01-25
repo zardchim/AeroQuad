@@ -18,6 +18,12 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>. 
 */
 
+#include "Ultrasonic.h"
+#define TRIGGER_PIN  34
+#define ECHO_PIN     35
+Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
+
+
 #ifndef _AEROQUAD_MAX_SONAR_RANGE_FINDER_H_
 #define _AEROQUAD_MAX_SONAR_RANGE_FINDER_H_
 
@@ -113,15 +119,13 @@ void updateRangeFinders() {
     }
   }
 
+
   if (rangeFinders[rangerToTrigger].triggerpin) {
     digitalWrite(rangeFinders[rangerToTrigger].triggerpin, HIGH);
   }
-	
-	range += a;
-	if (range > 3500){
-		range =0;
-		}
 
+	long microsec = ultrasonic.timing();
+	//range = ultrasonic.convert(microsec, Ultrasonic::CM) * 10;
 
   // Following will accept the sample if it's either withing "spike margin" of last raw reading or previous accepted reading
   // otherwise it's ignored as noise

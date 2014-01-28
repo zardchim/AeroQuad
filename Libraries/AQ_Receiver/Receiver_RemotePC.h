@@ -35,8 +35,8 @@ void initializeReceiver(int nbChannel) {
   receiverZero[THROTTLE] = 0;
   receiverCommand[MODE] = 2000;
   receiverZero[MODE] = 0;
-  receiverCommand[AUX] = 2000;
-  receiverZero[AUX] = 0;
+  receiverCommand[AUX1] = 2000;
+  receiverZero[AUX1] = 0;
 }
 
 int getRawChannelValue(byte channel) {

@@ -398,6 +398,8 @@
   
   #include <Platform_MPU6000.h>
   
+  #include <OpticalFlow_ADNS3080.h>
+  
   // Gyroscope declaration
   #include <Gyroscope_MPU6000.h>
 
@@ -407,7 +409,7 @@
 
   // Receiver Declaration
   #define RECEIVER_MEGA
-
+  
   // Motor declaration
   #define MOTOR_PWM_Timer
 

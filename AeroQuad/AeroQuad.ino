@@ -507,6 +507,7 @@
     readMPU6000Sensors();
     measureGyroSum();
     measureAccelSum();
+	
   }
 #endif
 
@@ -1578,7 +1579,6 @@ void process1HzTask() {
   #endif
 }
 
-int optic_xy[2];
 /*******************************************************************
  * Main loop funtions
  ******************************************************************/
@@ -1589,11 +1589,11 @@ void loop () {
 
   measureCriticalSensors();
   
-  ADNS3080_update(optic_xy);
+  ADNS3080_update();
   
-  Serial.print(optic_xy[0]);
+  Serial.print(OpticalFlow_xy[0]);
   Serial.print(" ");
-  Serial.println(optic_xy[1]);
+  Serial.println(OpticalFlow_xy[1]);
   
   // ================================================================
   // 100Hz task loop

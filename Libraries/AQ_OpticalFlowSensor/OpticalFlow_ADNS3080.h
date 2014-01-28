@@ -160,7 +160,7 @@ void ADNS3080_initialize(){
   
 }
 
-void ADNS3080_update(int opticaddress[]) {
+void ADNS3080_update() {
     
   delayMicroseconds(100);
   
@@ -172,18 +172,15 @@ void ADNS3080_update(int opticaddress[]) {
     dx = data_read(Delta_X);
     dy = data_read(Delta_Y);
     if (dx > 127)
-      opticaddress[0] += (256 - dx);
+      OpticalFlow_xy[0] += (256 - dx);
     else
-      opticaddress[0] -= dx;
+      OpticalFlow_xy[0] -= dx;
     if (dy > 127)
-      opticaddress[1] += (256 - dy);
+      OpticalFlow_xy[1] += (256 - dy);
     else
-      opticaddress[1] -= dy;
+      OpticalFlow_xy[1] -= dy;
 	  
-	 Serial.print("special print");
-	 Serial.print(opticaddress[0]);
-	 Serial.print("  ");
-	 Serial.println(opticaddress[1]);
+
 	//return opticaddress;
 	/*
     Serial.print (ADNS3080_x);

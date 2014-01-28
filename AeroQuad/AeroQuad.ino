@@ -51,6 +51,9 @@
   #error "CameraTXControl need to have CameraControl defined"
 #endif 
 
+//Add original Arduino SPI library"
+#include <SPI.h>
+
 #include <EEPROM.h>
 #include <Wire.h>
 #include <GlobalDefined.h>

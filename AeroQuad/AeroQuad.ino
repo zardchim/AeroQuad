@@ -484,7 +484,7 @@
     Wire.begin();
     TWBR = 12;
     initializeMPU6000Sensors();
-    
+	ADNS3080_initialize();    
   }
   
   // called when eeprom is initialized
@@ -1578,6 +1578,7 @@ void process1HzTask() {
   #endif
 }
 
+int optic_xy[2];
 /*******************************************************************
  * Main loop funtions
  ******************************************************************/
@@ -1587,7 +1588,13 @@ void loop () {
   deltaTime = currentTime - previousTime;
 
   measureCriticalSensors();
-
+  
+  ADNS3080_update(optic_xy);
+  
+  Serial.print(optic_xy[0]);
+  Serial.print(" ");
+  Serial.println(optic_xy[1]);
+  
   // ================================================================
   // 100Hz task loop
   // ================================================================

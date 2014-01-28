@@ -1,4 +1,8 @@
-#include<SPI.h>
+#ifndef _OpticalFlow_ADNS3080_H_
+#define _OpticalFlow_ADNS3080_H_
+
+#include <SPI.h>
+#include <OpticalFlow.h>
 
 #define Motion 0x02
 #define Delta_X 0x03
@@ -97,6 +101,8 @@ int nCs = 53;
 unsigned int srom_id =0;
 unsigned int motion = 0;
 
+static int ADNS3080_xy[2] = {0,0};  
+
 void data_write(unsigned int address, unsigned int data){
   address |= 0x80;
   delayMicroseconds(100);
@@ -154,10 +160,8 @@ void ADNS3080_initialize(){
   
 }
 
-int *ADNS3080_update() {
-  
-  static int ADNS3080_xy[2] = {0,0};  
-  
+void ADNS3080_update(int opticaddress[]) {
+    
   delayMicroseconds(100);
   
   motion = data_read(Motion);
@@ -168,15 +172,19 @@ int *ADNS3080_update() {
     dx = data_read(Delta_X);
     dy = data_read(Delta_Y);
     if (dx > 127)
-      ADNS3080_xy[0] += (256 - dx);
+      opticaddress[0] += (256 - dx);
     else
-      ADNS3080_xy[0] -= dx;
+      opticaddress[0] -= dx;
     if (dy > 127)
-      ADNS3080_xy[1] += (256 - dy);
+      opticaddress[1] += (256 - dy);
     else
-      ADNS3080_xy[1] -= dy;
+      opticaddress[1] -= dy;
 	  
-	return ADNS3080_xy;
+	 Serial.print("special print");
+	 Serial.print(opticaddress[0]);
+	 Serial.print("  ");
+	 Serial.println(opticaddress[1]);
+	//return opticaddress;
 	/*
     Serial.print (ADNS3080_x);
     Serial.print ("     ");
@@ -185,3 +193,5 @@ int *ADNS3080_update() {
   }
 
 }
+
+#endif

@@ -507,6 +507,7 @@
     readMPU6000Sensors();
     measureGyroSum();
     measureAccelSum();
+	ADNS3080_update();
 	
   }
 #endif
@@ -1588,12 +1589,6 @@ void loop () {
   deltaTime = currentTime - previousTime;
 
   measureCriticalSensors();
-  
-  ADNS3080_update();
-  
-  Serial.print(OpticalFlow_xy[0]);
-  Serial.print(" ");
-  Serial.println(OpticalFlow_xy[1]);
   
   // ================================================================
   // 100Hz task loop

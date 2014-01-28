@@ -94,8 +94,8 @@ const unsigned char SROM[1986]=
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int nCs = 53;
-int x = 0;
-int y = 0;
+unsigned int srom_id =0;
+unsigned int motion = 0;
 
 void data_write(unsigned int address, unsigned int data){
   address |= 0x80;
@@ -140,7 +140,6 @@ void upload_SROM(){
 }
 
 void ADNS3080_initialize(){
-  Serial.begin(115200);
   pinMode(nCs, OUTPUT);
   pinMode(MOSI, OUTPUT);
   //pinMode(MISO, INPUT);
@@ -151,18 +150,16 @@ void ADNS3080_initialize(){
   data_write(config_reg, 0x10); //change to 1600 resolution
   delay(1000);
   
-  Serial.println("uploading firmware");
   upload_SROM();
-  Serial.println("finish upload firmware");
-  Serial.println("start up");
+  
 }
 
-void ADNS3080_update() {
-    
+int *ADNS3080_update() {
+  
+  static int ADNS3080_xy[2] = {0,0};  
+  
   delayMicroseconds(100);
   
-  unsigned int srom_id =0;
-  unsigned int motion = 0;
   motion = data_read(Motion);
   srom_id = data_read(SROM_ID);
   
@@ -171,17 +168,20 @@ void ADNS3080_update() {
     dx = data_read(Delta_X);
     dy = data_read(Delta_Y);
     if (dx > 127)
-      x += (256 - dx);
+      ADNS3080_xy[0] += (256 - dx);
     else
-      x -= dx;
+      ADNS3080_xy[0] -= dx;
     if (dy > 127)
-      y += (256 - dy);
+      ADNS3080_xy[1] += (256 - dy);
     else
-      y -= dy;
-    Serial.print (x);
+      ADNS3080_xy[1] -= dy;
+	  
+	return ADNS3080_xy;
+	/*
+    Serial.print (ADNS3080_x);
     Serial.print ("     ");
-    Serial.println(y);
+    Serial.println(ADNS3080_y);
+	*/
   }
-  //Serial.println (motion);
-  //Serial.println (srom_id);
+
 }

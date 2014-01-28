@@ -161,9 +161,7 @@ void ADNS3080_initialize(){
 }
 
 void ADNS3080_update() {
-    
-  delayMicroseconds(100);
-  
+      
   motion = data_read(Motion);
   srom_id = data_read(SROM_ID);
   
@@ -179,16 +177,7 @@ void ADNS3080_update() {
       OpticalFlow_xy[1] += (256 - dy);
     else
       OpticalFlow_xy[1] -= dy;
-	  
-
-	//return opticaddress;
-	/*
-    Serial.print (ADNS3080_x);
-    Serial.print ("     ");
-    Serial.println(ADNS3080_y);
-	*/
-  }
-
+	}
 }
 
 #endif

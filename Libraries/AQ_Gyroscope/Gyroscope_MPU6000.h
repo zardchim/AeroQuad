@@ -44,7 +44,7 @@ void gyroUpdateHeading()
   gyroLastMesuredTime = currentTime;
 }
 
-void measureGyro() {
+void measureGyro() { 
   readMPU6000Gyro();
 
   int gyroADC[3];
@@ -61,6 +61,7 @@ void measureGyro() {
 
 void measureGyroSum() {
   readMPU6000Gyro();
+
   gyroSample[XAXIS] += (gyroRaw[XAXIS]=MPU6000.data.gyro.x);
   gyroSample[YAXIS] += (gyroRaw[YAXIS]=MPU6000.data.gyro.y);
   gyroSample[ZAXIS] += (gyroRaw[ZAXIS]=MPU6000.data.gyro.z);

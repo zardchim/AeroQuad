@@ -106,7 +106,6 @@ union uMPU6000 {
   } data;
 } MPU6000;
 
-
 #ifdef MPU6000_I2C
   #ifndef MPU6000_I2C_ADDRESS
 	#define MPU6000_I2C_ADDRESS 0x68
@@ -190,9 +189,9 @@ void initializeMPU6000Sensors()
   // SAMPLE RATE
   MPU6000_WriteReg(MPUREG_SMPLRT_DIV,0x00);     // Sample rate = 1kHz
 
-  // FS & DLPF   FS=1000º/s, DLPF = 42Hz (low pass filter)
+  // FS & DLPF   FS=1000?s, DLPF = 42Hz (low pass filter)
   MPU6000_WriteReg(MPUREG_CONFIG, BITS_DLPF_CFG_42HZ);
-  MPU6000_WriteReg(MPUREG_GYRO_CONFIG,BITS_FS_1000DPS);  // Gyro scale 1000º/s
+  MPU6000_WriteReg(MPUREG_GYRO_CONFIG,BITS_FS_1000DPS);  // Gyro scale 1000?s
   MPU6000_WriteReg(MPUREG_ACCEL_CONFIG,0x08);   // Accel scale +-4g (4096LSB/g)
 
 
@@ -220,6 +219,13 @@ void readMPU6000Sensors()
     for(byte i=0; i<sizeof(MPU6000)/sizeof(short); i++) {
       MPU6000.rawWord[i] = readWordI2C();
     }
+    
+
+	//chim_test
+	int tune_1 = MPU6000.data.gyro.x;
+	MPU6000.data.gyro.x = MPU6000.data.gyro.y;
+	MPU6000.data.gyro.y = (-1)*tune_1;
+
   #else
     spiMPU6000.Read(MPUREG_ACCEL_XOUT_H, MPU6000.rawByte, sizeof(MPU6000));
     MPU6000SwapData(MPU6000.rawByte, sizeof(MPU6000));

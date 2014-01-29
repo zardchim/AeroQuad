@@ -158,6 +158,8 @@ void ADNS3080_initialize(){
   
   upload_SROM();
   
+  OpticalFlow_lastx = OpticalFlow_xy[0];
+  OpticalFlow_lasty = OpticalFlow_xy[1];
 }
 
 void ADNS3080_update() {
@@ -166,17 +168,16 @@ void ADNS3080_update() {
   srom_id = data_read(SROM_ID);
   
   if (bitRead(motion,7) == 1){
-    int dx,dy;    
-    dx = data_read(Delta_X);
-    dy = data_read(Delta_Y);
-    if (dx > 127)
-      OpticalFlow_xy[0] += (256 - dx);
+    OpticalFlow_dx = data_read(Delta_X);
+    OpticalFlow_dy = data_read(Delta_Y);
+    if (OpticalFlow_dx > 127)
+      OpticalFlow_xy[0] += (256 - OpticalFlow_dx);
     else
-      OpticalFlow_xy[0] -= dx;
-    if (dy > 127)
-      OpticalFlow_xy[1] += (256 - dy);
+      OpticalFlow_xy[0] -= OpticalFlow_dx;
+    if (OpticalFlow_dy > 127)
+      OpticalFlow_xy[1] += (256 - OpticalFlow_dy);
     else
-      OpticalFlow_xy[1] -= dy;
+      OpticalFlow_xy[1] -= OpticalFlow_dy;
 	}
 }
 

@@ -667,6 +667,10 @@ void sendSerialTelemetry() {
 	//Print Optical Flow Sensor Data
 	PrintValueComma(OpticalFlow_xy[0]); 
 	PrintValueComma(OpticalFlow_xy[1]);	
+	PrintValueComma(OpticalFlow_dx);
+	PrintValueComma(OpticalFlow_dy);
+	PrintValueComma(receiverCommand[XAXIS]);
+	PrintValueComma(receiverCommand[YAXIS]);
 	
     #if defined (AltitudeHoldBaro) 
       PrintValueComma(getBaroAltitude()); 

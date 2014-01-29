@@ -664,6 +664,10 @@ void sendSerialTelemetry() {
     break;
  
   case 'z': // Send all Altitude data 
+	//Print Optical Flow Sensor Data
+	PrintValueComma(OpticalFlow_xy[0]); 
+	PrintValueComma(OpticalFlow_xy[1]);	
+	
     #if defined (AltitudeHoldBaro) 
       PrintValueComma(getBaroAltitude()); 
     #else
@@ -673,7 +677,7 @@ void sendSerialTelemetry() {
       SERIAL_PRINTLN(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
     #else
       SERIAL_PRINTLN(0); 
-    #endif 
+    #endif
     break;
     
   case '$': // send BatteryMonitor voltage/current readings

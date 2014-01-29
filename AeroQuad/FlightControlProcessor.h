@@ -26,10 +26,28 @@ void calculateFlightError()
     else
   #endif
   if (flightMode == ATTITUDE_FLIGHT_MODE) {
-    float rollAttitudeCmd  = updatePID((receiverCommand[XAXIS] - receiverZero[XAXIS]) * ATTITUDE_SCALING, kinematicsAngle[XAXIS], &PID[ATTITUDE_XAXIS_PID_IDX]);
-    float pitchAttitudeCmd = updatePID((receiverCommand[YAXIS] - receiverZero[YAXIS]) * ATTITUDE_SCALING, -kinematicsAngle[YAXIS], &PID[ATTITUDE_YAXIS_PID_IDX]);
+  
+	if (OpticalFlow_xy[0] >= 0) {
+		OpticalFlow_errorx = constrain(OpticalFlow_xy[0],1500,2000); 
+	} else 
+	{
+		OpticalFlow_errorx = constrain(OpticalFlow_xy[0],1500,1000);
+	}
+	
+	if (OpticalFlow_xy[1] >= 0) {
+		OpticalFlow_errory = constrain(OpticalFlow_xy[1],1500,2000);
+	} else
+	{
+		OpticalFlow_errory = constrain(OpticalFlow_xy[1],1500,1000);
+	}
+	
+    float rollAttitudeCmd  = updatePID((OpticalFlow_errory+receiverCommand[XAXIS] - receiverZero[XAXIS]) * ATTITUDE_SCALING, kinematicsAngle[XAXIS], &PID[ATTITUDE_XAXIS_PID_IDX]);
+    float pitchAttitudeCmd = updatePID((OpticalFlow_errory+receiverCommand[YAXIS] - receiverZero[YAXIS]) * ATTITUDE_SCALING, -kinematicsAngle[YAXIS], &PID[ATTITUDE_YAXIS_PID_IDX]);
     motorAxisCommandRoll   = updatePID(rollAttitudeCmd, gyroRate[XAXIS], &PID[ATTITUDE_GYRO_XAXIS_PID_IDX]);
     motorAxisCommandPitch  = updatePID(pitchAttitudeCmd, -gyroRate[YAXIS], &PID[ATTITUDE_GYRO_YAXIS_PID_IDX]);
+	
+	OpticalFlow_lastx = OpticalFlow_currentx;
+	OpticalFlow_lasty = OpticalFlow_currenty;
   }
   else {
     motorAxisCommandRoll = updatePID(getReceiverSIData(XAXIS), gyroRate[XAXIS]*rotationSpeedFactor, &PID[RATE_XAXIS_PID_IDX]);

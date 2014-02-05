@@ -119,16 +119,38 @@ void updateRangeFinders() {
     }
   }
 
+//test code//
+  // step 1: instruct sensor to read echoes
+  Wire.beginTransmission(112); // transmit to device #112 (0x70)
+                               // the address specified in the datasheet is 224 (0xE0)
+                               // but i2c adressing uses the high 7 bits so it's 112
+  Wire.write(byte(0x00));      // sets register pointer to the command register (0x00)  
+  Wire.write(byte(0x50));      // command sensor to measure in "inches" (0x50) 
+                               // use 0x51 for centimeters
+                               // use 0x52 for ping microseconds
+  Wire.endTransmission();      // stop transmitting
 
-  if (rangeFinders[rangerToTrigger].triggerpin) {
-    digitalWrite(rangeFinders[rangerToTrigger].triggerpin, HIGH);
+  // step 2: wait for readings to happen
+  delay(70);                   // datasheet suggests at least 65 milliseconds
+
+  // step 3: instruct sensor to return a particular echo reading
+  Wire.beginTransmission(112); // transmit to device #112
+  Wire.write(byte(0x02));      // sets register pointer to echo #1 register (0x02)
+  Wire.endTransmission();      // stop transmitting
+
+  // step 4: request reading from sensor
+  Wire.requestFrom(112, 2);    // request 2 bytes from slave device #112
+
+  int reading = 0;
+  // step 5: receive reading from sensor
+  if(2 <= Wire.available())    // if two bytes were received
+  {
+    reading = Wire.read();  // receive high byte (overwrites previous reading)
+    reading = reading << 8;    // shift high byte to be high 8 bits
+    reading |= Wire.read(); // receive low byte as lower 8 bits
   }
-
-	long microsec = ultrasonic.timing();
-	//range = ultrasonic.convert(microsec, Ultrasonic::CM) * 10;
-
-  // Following will accept the sample if it's either withing "spike margin" of last raw reading or previous accepted reading
-  // otherwise it's ignored as noise
+  
+  range = reading*25.4;
   
   if ((abs(range - lastRange[rangerToRead]) < SPIKE_FILTER_MARGIN) ||
       (abs(range * 1000.0 - rangeFinderRange[rangeFinders[rangerToRead].target]) < SPIKE_FILTER_MARGIN)) {

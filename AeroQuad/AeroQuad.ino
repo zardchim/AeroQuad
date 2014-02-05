@@ -435,7 +435,7 @@
     #define BMP085 
   #endif
   #ifdef AltitudeHoldRangeFinder
-    #define XLMAXSONAR
+    #define EZ4_MAXSONAR //XLMAXSONAR
   #endif
 
   // Battery Monitor declaration
@@ -1178,6 +1178,9 @@
 #if defined(XLMAXSONAR)
   #include <MaxSonarRangeFinder.h>
 #endif 
+#if defined(EZ4_MAXSONAR)
+  #include <MaxSonarRangeFinder_EZ4.h>
+#endif
 //********************************************************
 //*************** BATTERY MONITOR DECLARATION ************
 //********************************************************

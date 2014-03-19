@@ -226,6 +226,10 @@ void readMPU6000Sensors()
 	MPU6000.data.gyro.x = MPU6000.data.gyro.y;
 	MPU6000.data.gyro.y = (-1)*tune_1;
 
+	tune_1 = MPU6000.data.accel.x;
+	MPU6000.data.accel.x = MPU6000.data.accel.y;
+	MPU6000.data.accel.y = tune_1;
+	
   #else
     spiMPU6000.Read(MPUREG_ACCEL_XOUT_H, MPU6000.rawByte, sizeof(MPU6000));
     MPU6000SwapData(MPU6000.rawByte, sizeof(MPU6000));

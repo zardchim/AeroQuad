@@ -665,10 +665,10 @@ void sendSerialTelemetry() {
  
   case 'z': // Send all Altitude data 
 	//Print Optical Flow Sensor Data
-	PrintValueComma(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]); 
-	PrintValueComma(OpticalFlow_xy[1]);	
-	PrintValueComma(OpticalFlow_errorx);
-	PrintValueComma(OpticalFlow_errory);
+	PrintValueComma(altitudeHoldThrottleCorrection); 
+	PrintValueComma(throttle);	
+	PrintValueComma(temp_velocity);
+	PrintValueComma(temp_distance);
 	PrintValueComma(receiverCommand[XAXIS]);
 	PrintValueComma(receiverCommand[YAXIS]);
 	

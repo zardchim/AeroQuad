@@ -159,8 +159,8 @@ void initializeEEPROM() {
     PID[ZDAMPENING_PID_IDX].D = 0.0;
   #endif
   #if defined (AltitudeHoldRangeFinder)
-    PID[SONAR_ALTITUDE_HOLD_PID_IDX].P = 50.0;
-    PID[SONAR_ALTITUDE_HOLD_PID_IDX].I = 0.6;
+    PID[SONAR_ALTITUDE_HOLD_PID_IDX].P = 100.0;
+    PID[SONAR_ALTITUDE_HOLD_PID_IDX].I = 20.6;
     PID[SONAR_ALTITUDE_HOLD_PID_IDX].D = 0.0;
     PID[SONAR_ALTITUDE_HOLD_PID_IDX].windupGuard = 25.0; //this prevents the 0.1 I term to rise too far
   #endif

@@ -33,7 +33,7 @@
 #define INVALID_THROTTLE_CORRECTION -1000
 #define ALTITUDE_BUMP_SPEED 0.01
 
-
+int altitudeHoldThrottleCorrection;
 
 /**
  * processAltitudeHold
@@ -50,13 +50,19 @@ void processAltitudeHold()
   // http://aeroquad.com/showthread.php?359-Stable-flight-logic...&p=10325&viewfull=1#post10325
 
   if (altitudeHoldState == ON) {
-    int altitudeHoldThrottleCorrection = INVALID_THROTTLE_CORRECTION;
+
+    altitudeHoldThrottleCorrection = INVALID_THROTTLE_CORRECTION;
     // computer altitude error!
     #if defined AltitudeHoldRangeFinder
       if (isOnRangerRange(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX])) {
         if (sonarAltitudeToHoldTarget == INVALID_RANGE) {
           sonarAltitudeToHoldTarget = rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX];
         }
+		
+		//test
+		analogWrite(22,130);
+		analogWrite(23,0);
+		
         altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
         altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);
       }
@@ -109,9 +115,25 @@ void processAltitudeHold()
       }
     }
     throttle = altitudeHoldThrottle + altitudeHoldThrottleCorrection + zDampeningThrottleCorrection;
+
+  /*
+	#if defined AltitudeHoldRangeFinder
+		sonarAltitudeToHoldTarget = rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX];
+		
+		analogWrite(22,130);
+		analogWrite(23,0);
+		
+	    altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
+        altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);
+  */
   }
   else {
     throttle = receiverCommand[THROTTLE];
+	
+	//test
+	pinMode(22,0);
+	pinMode(23,0);
+	
   }
 }
 

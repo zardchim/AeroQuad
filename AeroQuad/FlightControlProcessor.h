@@ -7,7 +7,10 @@
 
 #define ATTITUDE_SCALING (0.75 * PWM2RAD)
 
-
+//test zone
+float temp_velocity = 0;
+float temp_distance = 0;
+float temp_accel = 0;
 /**
  * calculateFlightError
  *
@@ -27,8 +30,9 @@ void calculateFlightError()
   #endif
   if (flightMode == ATTITUDE_FLIGHT_MODE) {
   
-	OpticalFlow_errorx = (map(OpticalFlow_xy[0],-80,80,2000,1000));
-	OpticalFlow_errory = (map(OpticalFlow_xy[1],-80,80,2000,1000));
+	temp_accel = (filteredAccel[XAXIS])*cos(kinematicsAngle[XAXIS]);
+	//temp_velocity += deltaTime*temp_accel;
+	//temp_distance = temp_velocity*(deltaTime/1000000) + (1/2)*temp_accel*(temp_accel/1000000)*(temp_accel/1000000);
 	
     float rollAttitudeCmd  = updatePID((receiverCommand[XAXIS] - receiverZero[XAXIS]) * ATTITUDE_SCALING, kinematicsAngle[XAXIS], &PID[ATTITUDE_XAXIS_PID_IDX]);
     float pitchAttitudeCmd = updatePID((receiverCommand[YAXIS] - receiverZero[YAXIS]) * ATTITUDE_SCALING, -kinematicsAngle[YAXIS], &PID[ATTITUDE_YAXIS_PID_IDX]);

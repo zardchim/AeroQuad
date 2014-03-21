@@ -1,23 +1,3 @@
-/*
-  AeroQuad v3.0.1 - February 2012
-  www.AeroQuad.com
-  Copyright (c) 2012 Ted Carancho.  All rights reserved.
-  An Open Source Arduino based multicopter.
- 
-  This program is free software: you can redistribute it and/or modify 
-  it under the terms of the GNU General Public License as published by 
-  the Free Software Foundation, either version 3 of the License, or 
-  (at your option) any later version. 
- 
-  This program is distributed in the hope that it will be useful, 
-  but WITHOUT ANY WARRANTY; without even the implied warranty of 
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
-  GNU General Public License for more details. 
- 
-  You should have received a copy of the GNU General Public License 
-  along with this program. If not, see <http://www.gnu.org/licenses/>. 
-*/
-
 // FlightControl.pde is responsible for combining sensor measurements and
 // transmitter commands into motor commands for the defined flight configuration (X, +, etc.)
 //////////////////////////////////////////////////////////////////////////////
@@ -41,6 +21,38 @@ int altitudeHoldThrottleCorrection;
  * This function is responsible to process the throttle correction 
  * to keep the current altitude if selected by the user 
  */
+ 
+//test
+float sonar_PID_time = 0;
+float sonar_P = 100;
+float sonar_I = 10;
+float sonar_I_integratedError;
+float sonar_D = -400;
+float sonar_lastError = 0;
+
+/*
+ float update_sonar_PID(float targetPosition, float currentPosition) {
+
+  // AKA PID experiments
+  const float delta_sonar_PIDTime = (currentTime - sonar_PID_time) / 1000000.0;
+  sonar_PID_time = currentTime;  // AKA PID experiments
+  
+  float error = targetPosition - currentPosition;
+
+  if (inFlight) {
+    sonar_I_integratedError += error * delta_sonar_PIDTime;
+  }
+  else {
+    sonar_I_integratedError = 0.0;
+  }
+  sonar_I_integratedError = constrain(sonar_I, -500, -500);
+  float dTerm = sonar_D * (currentPosition - sonar_lastError) / (delta_sonar_PIDTime * 100); // dT fix from Honk
+  sonar_lastError = currentPosition;
+
+  return (sonar_P * error) + (sonar_I * sonar_I_integratedError) + dTerm;
+}
+*/
+
 void processAltitudeHold()
 {
   // ****************************** Altitude Adjust *************************
@@ -51,7 +63,7 @@ void processAltitudeHold()
 
   if (altitudeHoldState == ON) {
 
-    altitudeHoldThrottleCorrection = INVALID_THROTTLE_CORRECTION;
+	altitudeHoldThrottleCorrection = INVALID_THROTTLE_CORRECTION;
     // computer altitude error!
     #if defined AltitudeHoldRangeFinder
       if (isOnRangerRange(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX])) {
@@ -62,9 +74,10 @@ void processAltitudeHold()
 		//test
 		analogWrite(22,130);
 		analogWrite(23,0);
-		
+
+		//altitudeHoldThrottleCorrection = update_sonar_PID(sonarAltitudeToHoldTarget,rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
         altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
-        altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);
+		altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);
       }
     #endif
     #if defined AltitudeHoldBaro

@@ -160,8 +160,8 @@ void initializeEEPROM() {
   #endif
   #if defined (AltitudeHoldRangeFinder)
     PID[SONAR_ALTITUDE_HOLD_PID_IDX].P = 100.0;
-    PID[SONAR_ALTITUDE_HOLD_PID_IDX].I = 20.6;
-    PID[SONAR_ALTITUDE_HOLD_PID_IDX].D = 0.0;
+    PID[SONAR_ALTITUDE_HOLD_PID_IDX].I = 20.0;
+    PID[SONAR_ALTITUDE_HOLD_PID_IDX].D = -400.0;
     PID[SONAR_ALTITUDE_HOLD_PID_IDX].windupGuard = 25.0; //this prevents the 0.1 I term to rise too far
   #endif
 
@@ -365,13 +365,10 @@ void writeEEPROM(){
   writePID(ATTITUDE_GYRO_YAXIS_PID_IDX, LEVEL_GYRO_PITCH_PID_GAIN_ADR);
   
   writeFloat(rotationSpeedFactor,ROTATION_SPEED_FACTOR_ARD);
-  
-  #if defined AltitudeHoldBaro
-    writePID(BARO_ALTITUDE_HOLD_PID_IDX, ALTITUDE_PID_GAIN_ADR);
-    writeFloat(PID[BARO_ALTITUDE_HOLD_PID_IDX].windupGuard, ALTITUDE_WINDUP_ADR);
-  #endif
 
   #if defined AltitudeHoldBaro || defined AltitudeHoldRangeFinder
+	writePID(BARO_ALTITUDE_HOLD_PID_IDX, ALTITUDE_PID_GAIN_ADR);
+    writeFloat(PID[BARO_ALTITUDE_HOLD_PID_IDX].windupGuard, ALTITUDE_WINDUP_ADR);
     #if defined AltitudeHoldBaro
       writeFloat(baroSmoothFactor, ALTITUDE_SMOOTH_ADR);
     #else

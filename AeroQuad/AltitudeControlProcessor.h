@@ -25,7 +25,7 @@ int altitudeHoldThrottleCorrection;
 //test
 float sonar_PID_time = 0;
 float sonar_P = 100;
-float sonar_I = 10;
+float sonar_I = 100;
 float sonar_I_integratedError;
 float sonar_D = -400;
 float sonar_lastError = 0;
@@ -42,10 +42,10 @@ float sonar_lastError = 0;
   if (inFlight) {
     sonar_I_integratedError += error * delta_sonar_PIDTime;
   }
-  else {
+  else {	
     sonar_I_integratedError = 0.0;
   }
-  sonar_I_integratedError = constrain(sonar_I, -500, -500);
+  sonar_I_integratedError = constrain(sonar_I_integratedError, -500, 500);
   float dTerm = sonar_D * (currentPosition - sonar_lastError) / (delta_sonar_PIDTime * 100); // dT fix from Honk
   sonar_lastError = currentPosition;
 
@@ -75,8 +75,25 @@ void processAltitudeHold()
 		analogWrite(22,130);
 		analogWrite(23,0);
 
+		const float delta_sonar_PIDTime = (currentTime - sonar_PID_time) / 1000000.0;
+		sonar_PID_time = currentTime;
+		
+		float sonar_error = sonarAltitudeToHoldTarget - rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX];
+		
+		if (inFlight) {
+			sonar_I_integratedError += sonar_error * delta_sonar_PIDTime;
+		}
+		else {	
+			sonar_I_integratedError = 0.0;
+		}
+		sonar_I_integratedError = constrain(sonar_I_integratedError, -500, 500);
+		float sonar_dTerm = PID[SONAR_ALTITUDE_HOLD_PID_IDX].D * (rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX] - sonar_lastError) / (delta_sonar_PIDTime * 100);
+		sonar_lastError = rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX];
+		
+		altitudeHoldThrottleCorrection = (sonar_error * PID[SONAR_ALTITUDE_HOLD_PID_IDX].P) + (sonar_I_integratedError * PID[SONAR_ALTITUDE_HOLD_PID_IDX].I) + sonar_dTerm;
+		
 		//altitudeHoldThrottleCorrection = update_sonar_PID(sonarAltitudeToHoldTarget,rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
-        altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
+		//altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
 		altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);
       }
     #endif

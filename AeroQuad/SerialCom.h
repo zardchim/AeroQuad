@@ -678,7 +678,7 @@ void sendSerialTelemetry() {
       PrintValueComma(0);
     #endif 
     #if defined (AltitudeHoldRangeFinder) 
-      SERIAL_PRINTLN(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+      SERIAL_PRINTLN(100*rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
     #else
       SERIAL_PRINTLN(0); 
     #endif

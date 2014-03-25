@@ -1,23 +1,3 @@
-/*
-  AeroQuad v3.0.1 - February 2012
-  www.AeroQuad.com
-  Copyright (c) 2012 Ted Carancho.  All rights reserved.
-  An Open Source Arduino based multicopter.
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
 // SerialCom.pde is responsible for the serial communication for commands and telemetry from the AeroQuad
 // This comtains readSerialCommand() which listens for a serial command and it's arguments
 // This also contains readSerialTelemetry() which listens for a telemetry request and responds with the requested data
@@ -667,8 +647,8 @@ void sendSerialTelemetry() {
 	//Print Optical Flow Sensor Data
 	PrintValueComma(altitudeHoldThrottleCorrection); 
 	PrintValueComma(sonarAltitudeToHoldTarget);	
-	PrintValueComma(temp_velocity);
-	PrintValueComma(temp_distance);
+	PrintValueComma(sonar_zvel);
+	PrintValueComma(sonar_zaccel);
 	PrintValueComma(estimatedZVelocity);
 	PrintValueComma(receiverCommand[YAXIS]);
 	
@@ -684,6 +664,15 @@ void sendSerialTelemetry() {
     #endif
     break;
     
+	//altitude debugging
+  case '7': // Send all Altitude data 
+	//Print Optical Flow Sensor Data
+	PrintValueComma(sonar_zvel); 
+	PrintValueComma(sonar_zaccel);	
+	PrintValueComma(sonar_height);
+	PrintValueComma(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+    break;
+	
   case '$': // send BatteryMonitor voltage/current readings
     #if defined (BattMonitor)
       PrintValueComma((float)batteryData[0].voltage/100.0); // voltage internally stored at 10mV:s

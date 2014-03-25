@@ -30,6 +30,17 @@ float sonar_I_integratedError;
 float sonar_D = -400;
 float sonar_lastError = 0;
 
+float sonar_zvel = 0;
+float sonar_zvel_time = 0;
+float sonar_last_range = 0;
+
+float sonar_zaccel = 0;
+float sonar_zaccel_time = 0;
+float sonar_last_zvel = 0;
+
+float sonar_height = 0;
+float sonar_height_dt = 0;
+
 /*
  float update_sonar_PID(float targetPosition, float currentPosition) {
 
@@ -53,6 +64,30 @@ float sonar_lastError = 0;
 }
 */
 
+void calculate_sonar_zvel(float current_range) {
+
+	sonar_zvel = (current_range - sonar_last_range)/ (currentTime - sonar_zvel_time);
+	sonar_last_range = current_range;
+	sonar_zvel_time = currentTime;
+
+}
+
+void calculate_sonar_zaccel() {
+
+	sonar_zaccel = (sonar_zvel - sonar_last_zvel)/ (currentTime - sonar_zaccel_time);
+	sonar_zaccel_time = currentTime;
+	sonar_last_zvel = sonar_zvel;
+}
+
+void calculate_sonar_height() {
+
+	float sonar_height_deltatime = (currentTime - sonar_height_dt);
+	sonar_height_dt = currentTime;
+	
+	sonar_height = (sonar_zvel*sonar_height_deltatime)+(1/2)*(sonar_zaccel)*(sonar_height_deltatime)*(sonar_height_deltatime);
+
+}
+	
 void processAltitudeHold()
 {
   // ****************************** Altitude Adjust *************************
@@ -61,6 +96,10 @@ void processAltitudeHold()
   // Thanks to Sherbakov for his work in Z Axis dampening
   // http://aeroquad.com/showthread.php?359-Stable-flight-logic...&p=10325&viewfull=1#post10325
 
+	//calculate_sonar_zvel(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+	//calculate_sonar_zaccel;	
+	//calculate_sonar_height;
+		
   if (altitudeHoldState == ON) {
 
 	altitudeHoldThrottleCorrection = INVALID_THROTTLE_CORRECTION;
@@ -91,7 +130,8 @@ void processAltitudeHold()
 		sonar_lastError = rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX];
 		
 		altitudeHoldThrottleCorrection = (sonar_error * PID[SONAR_ALTITUDE_HOLD_PID_IDX].P) + (sonar_I_integratedError * PID[SONAR_ALTITUDE_HOLD_PID_IDX].I) + sonar_dTerm;
-		
+		//test
+
 		//altitudeHoldThrottleCorrection = update_sonar_PID(sonarAltitudeToHoldTarget,rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
 		//altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
 		altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);

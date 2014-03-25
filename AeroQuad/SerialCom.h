@@ -671,6 +671,17 @@ void sendSerialTelemetry() {
 	PrintValueComma(sonar_zaccel);	
 	PrintValueComma(100*sonar_height);
 	PrintValueComma(100*rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+	PrintValueComma(-estimatedZVelocity);
+	PrintValueComma(-zVelocity);
+	PrintValueComma(estimatedZVelocity+sonar_zvel);
+	PrintValueComma(zVelocity+sonar_zvel);
+	PrintValueComma(accelerometer_height);
+	PrintValueComma(PID[SONAR_ALTITUDE_HOLD_PID_IDX].P);
+	PrintValueComma(PID[SONAR_ALTITUDE_HOLD_PID_IDX].I);
+	PrintValueComma(PID[SONAR_ALTITUDE_HOLD_PID_IDX].D);
+	PrintValueComma(altitudeHoldThrottleCorrection);
+	PrintValueComma(zDampeningThrottleCorrection);
+	PrintValueComma(throttle);
 	SERIAL_PRINTLN();
     break;
 	

@@ -669,8 +669,9 @@ void sendSerialTelemetry() {
 	//Print Optical Flow Sensor Data
 	PrintValueComma(sonar_zvel); 
 	PrintValueComma(sonar_zaccel);	
-	PrintValueComma(sonar_height);
-	PrintValueComma(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+	PrintValueComma(100*sonar_height);
+	PrintValueComma(100*rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+	SERIAL_PRINTLN();
     break;
 	
   case '$': // send BatteryMonitor voltage/current readings

@@ -532,6 +532,8 @@ void process100HzTask() {
   calculate_sonar_zvel(rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
   calculate_sonar_zaccel();	
   calculate_sonar_height();
+  calculate_acclerometer_zaccel();
+  calculate_accelerometer_height();
   
   for (int axis = XAXIS; axis <= ZAXIS; axis++) {
     filteredAccel[axis] = computeFourthOrder(meterPerSecSec[axis], &fourthOrder[axis]);

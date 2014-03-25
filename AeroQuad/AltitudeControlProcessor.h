@@ -85,7 +85,21 @@ void calculate_sonar_height() {
 	sonar_height_dt = currentTime;
 	
 	sonar_height += (sonar_zvel*sonar_height_deltatime)+(1/2)*(sonar_zaccel)*(sonar_height_deltatime)*(sonar_height_deltatime);
+}
 
+float accelerometer_zaccel = 0;
+float accelerometer_height = 0;
+float last_estimatedZVelocity = 0;
+
+void calculate_acclerometer_zaccel(){
+	
+	accelerometer_zaccel = (estimatedZVelocity - last_estimatedZVelocity)/ G_Dt;
+	last_estimatedZVelocity = estimatedZVelocity;
+}
+
+void calculate_accelerometer_height() {
+
+	accelerometer_height += (estimatedZVelocity*G_Dt)+(1/2)*(accelerometer_zaccel)*(G_Dt)*(G_Dt);
 }
 	
 void processAltitudeHold()
@@ -110,6 +124,7 @@ void processAltitudeHold()
 		analogWrite(22,130);
 		analogWrite(23,0);
 
+		
 		const float delta_sonar_PIDTime = (currentTime - sonar_PID_time) / 1000000.0;
 		sonar_PID_time = currentTime;
 		
@@ -129,6 +144,8 @@ void processAltitudeHold()
 		//test
 
 		//altitudeHoldThrottleCorrection = update_sonar_PID(sonarAltitudeToHoldTarget,rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX]);
+
+
 		//altitudeHoldThrottleCorrection = updatePID(sonarAltitudeToHoldTarget, rangeFinderRange[ALTITUDE_RANGE_FINDER_INDEX], &PID[SONAR_ALTITUDE_HOLD_PID_IDX]);
 		altitudeHoldThrottleCorrection = constrain(altitudeHoldThrottleCorrection, minThrottleAdjust, maxThrottleAdjust);
       }
